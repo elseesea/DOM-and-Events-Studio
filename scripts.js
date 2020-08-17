@@ -13,18 +13,23 @@ let btnLeft = null;
 let btnRight = null;
 
 function init () {
-    btnTakeOff = document.getElementById("takeoff");
-    btnLanding = document.getElementById("landing");
-    btnMissionAbort = document.getElementById("missionAbort");
-    pFlightStatus = document.getElementById("flightStatus");
-    bkgShuttle = document.getElementById("shuttleBackground");
+
+	btnTakeOff = document.getElementById("takeoff");
+	btnLanding = document.getElementById("landing");
+	btnMissionAbort = document.getElementById("missionAbort");
+	pFlightStatus = document.getElementById("flightStatus");
+	bkgShuttle = document.getElementById("shuttleBackground");
 	shuttleHeight = document.getElementById("spaceShuttleHeight");
 	btnDown = document.getElementById("down");
 	btnUp = document.getElementById("up");
 	btnLeft = document.getElementById("left");
 	btnRight = document.getElementById("right");
 	imgRocket = document.getElementById('rocket')
-	imgRocket.style.position = 'relative';
+//	imgRocket.style.position = 'relative';
+	imgRocket.style.position = 'absolute';
+	let origTop = imgRocket.style.top;
+	let origLeft = imgRocket.style.left;
+
 /*
  * Take off
  */
@@ -38,15 +43,21 @@ function init () {
 		};
     });
 
+function returnRocket(aLeft, aTop) {
+	imgRocket.style.left = aLeft;
+	imgRocket.style.top = aTop;	
+}
+
 /*
  * Landing
  */
  
     btnLanding.addEventListener("click", function (event) {
         window.alert("The shuttle is landing. Landing gear engaged");
-		pFlightStatus.innerHTML = "The shuttle has landed";
-		document.getElementById("shuttleBackground").style.backgroundColor = "green";
-		document.getElementById("spaceShuttleHeight").innerHTML = "0";
+	pFlightStatus.innerHTML = "The shuttle has landed";
+	document.getElementById("shuttleBackground").style.backgroundColor = "green";
+	document.getElementById("spaceShuttleHeight").innerHTML = "0";
+	returnRocket(origLeft, origTop);
     });
 
 /*
@@ -60,7 +71,8 @@ function init () {
 			pFlightStatus.innerHTML = "Mission aborted";
 			bkgShuttle.style.backgroundColor = "green";
 			shuttleHeight.innerHTML = "0";
-		};
+	};
+	returnRocket(origLeft, origTop);
     });
 
 function getX() {
@@ -76,7 +88,11 @@ function getY() {
  */
 	btnDown.addEventListener("click", function (event) {
 		let imgY = getY();
-		imgRocket.style.top = imgY + 10 + 'px';
+		imgY += 10;
+		if (imgY > 250) {
+			imgY = 250;
+		}
+		imgRocket.style.top = imgY + 'px';
 	});
  
 /*
@@ -85,6 +101,9 @@ function getY() {
 	btnUp.addEventListener("click", function (event) {
 		let imgY = parseInt(getY());
 		imgY = imgY - 10;
+		if (imgY < 0) {
+			imgY = 0;
+		}
 		imgRocket.style.top = imgY + 'px';
 	});
  
@@ -94,6 +113,9 @@ function getY() {
 	btnLeft.addEventListener("click", function (event) {
 		let imgX = parseInt(getX());
 		imgX -= 10;
+		if (imgX < -20) {
+			imgX = -20;
+		}
 		imgRocket.style.left = imgX + 'px';
 	});
  
@@ -102,10 +124,11 @@ function getY() {
  */
 	btnRight.addEventListener("click", function (event) {
 		let imgX = getX();
-console.log('imgX = ' + imgX);
-let newLoc = imgX + 10;
-console.log('newLoc = ' + newLoc);
-		imgRocket.style.left = newLoc;
+		imgX += 10;
+		if (imgX > 440) {
+			imgX = 440;
+		}
+		imgRocket.style.left = imgX + 'px';
 	});
  
 }
